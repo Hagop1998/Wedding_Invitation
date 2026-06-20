@@ -36,6 +36,9 @@ export default function Hero() {
   const youtubeVideoId = getYouTubeVideoId(youtubeMusic)
   const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(weddingDate))
   const playerRef = useRef(null)
+  const playerContainerRef = useRef(null)
+  const playerReadyRef = useRef(false)
+  const wantsSoundRef = useRef(false)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -46,28 +49,41 @@ export default function Hero() {
   }, [weddingDate])
 
   useEffect(() => {
-    if (!youtubeVideoId) return undefined
+    if (!youtubeVideoId || !playerContainerRef.current) return undefined
 
     let cancelled = false
 
-    function startMusic() {
+    function tryPlayWithSound() {
       const player = playerRef.current
-      if (!player?.playVideo) return
+      const { YT } = window
 
-      player.unMute?.()
+      if (!playerReadyRef.current || !player?.playVideo || !YT) {
+        return false
+      }
+
+      player.unMute()
+      player.setVolume(100)
       player.playVideo()
+
+      const state = player.getPlayerState?.()
+      const isActive =
+        state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING
+
+      return isActive || !player.isMuted?.()
     }
 
     function onUserInteraction() {
-      startMusic()
-      document.removeEventListener('click', onUserInteraction)
-      document.removeEventListener('touchstart', onUserInteraction)
+      wantsSoundRef.current = true
+      if (tryPlayWithSound()) {
+        document.removeEventListener('pointerdown', onUserInteraction)
+        document.removeEventListener('keydown', onUserInteraction)
+      }
     }
 
     loadYouTubeApi().then((YT) => {
-      if (cancelled) return
+      if (cancelled || !playerContainerRef.current) return
 
-      playerRef.current = new YT.Player('hero-youtube-player', {
+      playerRef.current = new YT.Player(playerContainerRef.current, {
         height: '0',
         width: '0',
         videoId: youtubeVideoId,
@@ -75,9 +91,11 @@ export default function Hero() {
           autoplay: 1,
           controls: 0,
           disablekb: 1,
+          enablejsapi: 1,
           fs: 0,
           loop: 1,
           mute: 1,
+          origin: window.location.origin,
           playlist: youtubeVideoId,
           modestbranding: 1,
           playsinline: 1,
@@ -85,19 +103,37 @@ export default function Hero() {
         },
         events: {
           onReady: (event) => {
+            playerReadyRef.current = true
+            event.target.mute()
             event.target.playVideo()
+
+            if (wantsSoundRef.current) {
+              tryPlayWithSound()
+            }
+          },
+          onStateChange: (event) => {
+            if (
+              wantsSoundRef.current &&
+              event.data === YT.PlayerState.PLAYING &&
+              event.target.isMuted?.()
+            ) {
+              event.target.unMute()
+              event.target.setVolume(100)
+            }
           },
         },
       })
     })
 
-    document.addEventListener('click', onUserInteraction)
-    document.addEventListener('touchstart', onUserInteraction)
+    document.addEventListener('pointerdown', onUserInteraction, { passive: true })
+    document.addEventListener('keydown', onUserInteraction)
 
     return () => {
       cancelled = true
-      document.removeEventListener('click', onUserInteraction)
-      document.removeEventListener('touchstart', onUserInteraction)
+      playerReadyRef.current = false
+      wantsSoundRef.current = false
+      document.removeEventListener('pointerdown', onUserInteraction)
+      document.removeEventListener('keydown', onUserInteraction)
       playerRef.current?.destroy?.()
       playerRef.current = null
     }
@@ -132,28 +168,28 @@ export default function Hero() {
             </p>
             <p className="hero__tagline">{heroTagline[language]}</p>
           </div>
-
-          <div className="hero__countdown">
-            <h1 className="hero__countdown-title">{countdownTitle[language]}</h1>
-            <div className="hero__countdown-grid">
-              {units.map((unit, index) => (
-                <div key={unit.label} className="hero__countdown-unit">
-                  <strong>{unit.value}</strong>
-                  <span>{unit.label}</span>
-                  {index < units.length - 1 && (
-                    <span className="hero__countdown-divider" aria-hidden="true" />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
         <div className="hero__photo-fade" aria-hidden="true" />
       </div>
 
+      <div className="hero__countdown">
+        <h1 className="hero__countdown-title">{countdownTitle[language]}</h1>
+        <div className="hero__countdown-grid">
+          {units.map((unit, index) => (
+            <div key={unit.label} className="hero__countdown-unit">
+              <strong>{unit.value}</strong>
+              <span>{unit.label}</span>
+              {index < units.length - 1 && (
+                <span className="hero__countdown-divider" aria-hidden="true" />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
       {youtubeVideoId && (
-        <div id="hero-youtube-player" className="hero__youtube-player" aria-hidden="true" />
+        <div ref={playerContainerRef} className="hero__youtube-player" aria-hidden="true" />
       )}
     </section>
   )

@@ -37,6 +37,14 @@ export function loadYouTubeApi() {
         tag.id = 'youtube-iframe-api'
         tag.src = 'https://www.youtube.com/iframe_api'
         document.head.appendChild(tag)
+      } else {
+        const poll = setInterval(() => {
+          if (window.YT?.Player) {
+            clearInterval(poll)
+            resolve(window.YT)
+          }
+        }, 50)
+        setTimeout(() => clearInterval(poll), 10000)
       }
     })
   }
