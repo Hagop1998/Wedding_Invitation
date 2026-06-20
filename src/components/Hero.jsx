@@ -35,7 +35,6 @@ export default function Hero() {
   } = weddingConfig
   const youtubeVideoId = getYouTubeVideoId(youtubeMusic)
   const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(weddingDate))
-  const [isPlaying, setIsPlaying] = useState(false)
   const playerRef = useRef(null)
 
   useEffect(() => {
@@ -51,6 +50,20 @@ export default function Hero() {
 
     let cancelled = false
 
+    function startMusic() {
+      const player = playerRef.current
+      if (!player?.playVideo) return
+
+      player.unMute?.()
+      player.playVideo()
+    }
+
+    function onUserInteraction() {
+      startMusic()
+      document.removeEventListener('click', onUserInteraction)
+      document.removeEventListener('touchstart', onUserInteraction)
+    }
+
     loadYouTubeApi().then((YT) => {
       if (cancelled) return
 
@@ -59,58 +72,40 @@ export default function Hero() {
         width: '0',
         videoId: youtubeVideoId,
         playerVars: {
-          autoplay: 0,
+          autoplay: 1,
           controls: 0,
           disablekb: 1,
           fs: 0,
           loop: 1,
+          mute: 1,
           playlist: youtubeVideoId,
           modestbranding: 1,
           playsinline: 1,
           rel: 0,
         },
         events: {
-          onStateChange: (event) => {
-            if (event.data === YT.PlayerState.PLAYING) {
-              setIsPlaying(true)
-            }
-            if (
-              event.data === YT.PlayerState.PAUSED ||
-              event.data === YT.PlayerState.ENDED
-            ) {
-              setIsPlaying(false)
-            }
+          onReady: (event) => {
+            event.target.playVideo()
           },
         },
       })
     })
 
+    document.addEventListener('click', onUserInteraction)
+    document.addEventListener('touchstart', onUserInteraction)
+
     return () => {
       cancelled = true
+      document.removeEventListener('click', onUserInteraction)
+      document.removeEventListener('touchstart', onUserInteraction)
       playerRef.current?.destroy?.()
       playerRef.current = null
     }
   }, [youtubeVideoId])
 
-  function toggleMusic() {
-    const player = playerRef.current
-    if (!player?.getPlayerState) return
-
-    const { YT } = window
-    const state = player.getPlayerState()
-
-    if (state === YT.PlayerState.PLAYING) {
-      player.pauseVideo()
-    } else {
-      player.playVideo()
-    }
-  }
-
   const language = 'en'
   const copy = {
     units: ['day', 'hour', 'minute', 'second'],
-    play: 'Play music',
-    pause: 'Pause music',
   }
 
   const units = [
@@ -123,60 +118,43 @@ export default function Hero() {
   return (
     <section className="hero">
       <div className="hero__photo-wrap">
-        <img className="hero__photo" src={heroImage} alt={`${groom} և ${bride}`} />
+        <img className="hero__photo" src={heroImage} alt={`${groom} and ${bride}`} />
 
         <div className="hero__overlay">
           <p className="hero__label">{heroLabel[language]}</p>
           <img className="hero__logo" src={heroLogo} alt="" aria-hidden="true" />
         </div>
 
-        <div className="hero__caption">
-          <p className="hero__names">
-            {groom} & {bride}
-          </p>
-          <p className="hero__tagline">{heroTagline[language]}</p>
+        <div className="hero__bottom">
+          <div className="hero__caption">
+            <p className="hero__names">
+              {groom} & {bride}
+            </p>
+            <p className="hero__tagline">{heroTagline[language]}</p>
+          </div>
+
+          <div className="hero__countdown">
+            <h1 className="hero__countdown-title">{countdownTitle[language]}</h1>
+            <div className="hero__countdown-grid">
+              {units.map((unit, index) => (
+                <div key={unit.label} className="hero__countdown-unit">
+                  <strong>{unit.value}</strong>
+                  <span>{unit.label}</span>
+                  {index < units.length - 1 && (
+                    <span className="hero__countdown-divider" aria-hidden="true" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="hero__photo-fade" aria-hidden="true" />
       </div>
 
       {youtubeVideoId && (
-        <>
-          <div id="hero-youtube-player" className="hero__youtube-player" aria-hidden="true" />
-          <button
-            type="button"
-            className={`hero__play${isPlaying ? ' hero__play--playing' : ''}`}
-            aria-label={isPlaying ? copy.pause : copy.play}
-            aria-pressed={isPlaying}
-            onClick={toggleMusic}
-          >
-            {isPlaying ? (
-              <svg className="hero__play-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-              </svg>
-            ) : (
-              <svg className="hero__play-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M8 5v14l11-7L8 5z" />
-              </svg>
-            )}
-          </button>
-        </>
+        <div id="hero-youtube-player" className="hero__youtube-player" aria-hidden="true" />
       )}
-
-      <div className="hero__countdown">
-        <h1 className="hero__countdown-title">{countdownTitle[language]}</h1>
-        <div className="hero__countdown-grid">
-          {units.map((unit, index) => (
-            <div key={unit.label} className="hero__countdown-unit">
-              <strong>{unit.value}</strong>
-              <span>{unit.label}</span>
-              {index < units.length - 1 && (
-                <span className="hero__countdown-divider" aria-hidden="true" />
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
     </section>
   )
 }

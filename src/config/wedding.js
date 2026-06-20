@@ -72,7 +72,7 @@ export const weddingConfig = {
         en: 'Wedding Reception',
       },
       icon: 'champagne',
-      time: '16:00',
+      time: '17:30',
       venue: {
         hy: 'Lianna Garden Hall',
         en: 'Lianna Garden Hall',
