@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@300;400&family=Raleway:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg: #f5f3f3;
+  --accent: #a5918b;
+  --accent-dark: #8f7a74;
+  --ink: #1d1d1d;
+  --muted: #a5918b;
+  --white: #ffffff;
+  --shadow: 0 12px 40px rgba(165, 145, 139, 0.12);
+  --radius: 0;
+  font-family: 'Raleway', sans-serif;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+.site {
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}

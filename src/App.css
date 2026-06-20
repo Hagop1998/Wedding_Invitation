@@ -1,0 +1,724 @@
+.site {
+  background: var(--bg);
+  animation: site-fade-in 0.6s ease;
+  overflow-x: hidden;
+}
+
+@keyframes site-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-36px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-from-top {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__photo-wrap,
+  .hero__label,
+  .hero__logo,
+  .hero__names,
+  .hero__tagline,
+  .hero__play,
+  .hero__countdown,
+  .invitation--revealed .invitation__content > *,
+  .invitation--revealed .invitation__photo-wrap {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+.section {
+  padding: 40px 20px 20px;
+}
+
+.section__title {
+  margin: 0 0 40px;
+  text-align: center;
+  color: var(--accent);
+  font-size: clamp(28px, 6vw, 50px);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.section__title::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 36px;
+  margin: 20px auto 0;
+  background: rgba(165, 145, 139, 0.35);
+}
+
+/* Shared photo rows — side by side like hraver H216 */
+.photo-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.photo-row img {
+  object-fit: cover;
+  display: block;
+}
+
+.photo-row--triple .photo-row__side {
+  width: 96px;
+  height: 150px;
+}
+
+.photo-row--triple .photo-row__center {
+  width: 110px;
+  height: 190px;
+  align-self: flex-start;
+}
+
+.photo-row--single {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.photo-row__frame {
+  width: min(65vw, 260px);
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.photo-row__frame img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 130%;
+  height: 130%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center center;
+  transform: translate(-50%, -50%);
+}
+
+@media (min-width: 480px) {
+  .photo-row--triple .photo-row__side {
+    width: 120px;
+    height: 185px;
+  }
+
+  .photo-row--triple .photo-row__center {
+    width: 140px;
+    height: 235px;
+  }
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 32px 20px 24px;
+  background: var(--bg);
+  text-align: center;
+}
+
+.hero__photo-wrap {
+  position: relative;
+  width: min(88vw, 340px);
+  margin: 0 auto 12px;
+  animation: slide-from-top 1.1s ease both;
+}
+
+.hero__photo {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.92) contrast(0.98);
+}
+
+.hero__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0 18px 56px;
+  text-align: center;
+  color: var(--white);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.42) 0%,
+    rgba(0, 0, 0, 0.16) 65%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero__label {
+  margin: 0;
+  padding-top: 6px;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.82);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+  animation: slide-from-left 0.85s ease 0.35s both;
+}
+
+.hero__logo {
+  display: block;
+  width: clamp(88px, 24vw, 128px);
+  height: auto;
+  margin: -14px auto 0;
+  transform: translateY(-6px);
+  filter: drop-shadow(0 2px 14px rgba(0, 0, 0, 0.35));
+  animation: hero-logo-in 0.9s ease 0.5s both;
+}
+
+@keyframes hero-logo-in {
+  from {
+    opacity: 0;
+    transform: translate(-32px, -6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0, -6px);
+  }
+}
+
+.hero__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 0 16px 22px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.hero__names {
+  margin: 0 0 4px;
+  /* font-family: 'Great Vibes', cursive; */
+  font-family: 'Allura', cursive;
+  font-size: clamp(28px, 7vw, 38px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.15;
+  white-space: nowrap;
+  color: var(--accent);
+  animation: slide-from-left 0.85s ease 0.65s both;
+}
+
+.hero__tagline {
+  margin: 0;
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(17px, 4.2vw, 22px);
+  font-weight: 400;
+  color: var(--accent-dark);
+  opacity: 0.9;
+  animation: slide-from-left 0.85s ease 0.8s both;
+}
+
+.hero__photo-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  height: 42%;
+  background: linear-gradient(to bottom, transparent 0%, rgba(245, 243, 243, 0.7) 35%, var(--bg) 100%);
+  pointer-events: none;
+}
+
+.hero__countdown {
+  width: min(100%, 380px);
+  margin-top: 0;
+  animation: slide-from-left 0.9s ease 1.05s both;
+}
+
+.hero__countdown-title {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: clamp(22px, 5vw, 32px);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.hero__countdown-grid {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.hero__countdown-unit {
+  position: relative;
+  flex: 1;
+  padding: 0 10px;
+}
+
+.hero__countdown-unit strong {
+  display: block;
+  color: var(--accent);
+  font-size: clamp(26px, 6vw, 40px);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.hero__countdown-unit span {
+  display: block;
+  margin-top: 8px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 300;
+}
+
+.hero__countdown-divider {
+  position: absolute;
+  top: 6px;
+  right: 0;
+  width: 1px;
+  height: 38px;
+  background: rgba(165, 145, 139, 0.4);
+}
+
+.hero__play {
+  margin: 16px 0 14px;
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(165, 145, 139, 0.55);
+  color: var(--white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.2s ease, transform 0.2s ease;
+  animation: slide-from-top 0.75s ease 0.95s both;
+}
+
+.hero__play-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.hero__play:hover {
+  background: rgba(165, 145, 139, 0.75);
+  transform: scale(1.04);
+}
+
+.hero__youtube-player {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Invitation — text then staggered side-by-side photos */
+.invitation {
+  padding-top: 24px;
+}
+
+.invitation__content {
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
+.invitation__greeting {
+  margin: 0 0 22px;
+  color: var(--accent);
+  font-size: clamp(22px, 4.5vw, 30px);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+}
+
+.invitation__body {
+  margin: 0 0 32px;
+  color: var(--accent);
+  font-size: 15px;
+  line-height: 1.9;
+  font-weight: 300;
+}
+
+.invitation__date {
+  margin: 0;
+  color: var(--accent);
+  font-size: clamp(26px, 5.5vw, 36px);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+.invitation__content > * {
+  opacity: 0;
+}
+
+.invitation__photo-wrap {
+  opacity: 0;
+}
+
+.invitation--revealed .invitation__greeting {
+  animation: slide-from-left 0.85s ease 0.1s both;
+}
+
+.invitation--revealed .invitation__body {
+  animation: slide-from-left 0.85s ease 0.25s both;
+}
+
+.invitation--revealed .invitation__date {
+  animation: slide-from-left 0.85s ease 0.4s both;
+}
+
+.invitation--revealed .invitation__photo-wrap--left {
+  animation: slide-from-top 0.95s ease 0.55s both;
+}
+
+.invitation--revealed .invitation__photo-wrap--right {
+  animation: slide-from-top 0.95s ease 0.7s both;
+}
+
+.invitation__photos {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  max-width: 560px;
+  margin: 36px auto 0;
+  padding: 0;
+}
+
+.invitation__photo-wrap {
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.invitation__photo-wrap--left {
+  flex: 0 0 44%;
+  margin-top: clamp(56px, 14vw, 84px);
+  overflow: hidden;
+}
+
+.invitation__photo-wrap--left .invitation__photo {
+  width: 100%;
+  aspect-ratio: 2 / 3.5;
+  object-fit: cover;
+}
+
+@media (max-width: 480px) {
+  .invitation__photos {
+    gap: 5px;
+  }
+
+  .invitation__photo-wrap--left {
+    margin-top: clamp(40px, 11vw, 64px);
+  }
+}
+
+.invitation__photo-wrap--right {
+  flex: 0 0 52%;
+  overflow: hidden;
+}
+
+.invitation__photo {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+/* Schedule */
+.schedule__intro-gallery {
+  margin-bottom: 70px;
+}
+
+.schedule__events {
+  display: grid;
+  gap: 70px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.schedule__event {
+  text-align: center;
+}
+
+.schedule__icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  color: var(--accent);
+}
+
+.schedule__event-title {
+  margin: 0 0 10px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.schedule__time {
+  margin: 0 0 10px;
+  color: var(--accent);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.schedule__venue {
+  margin: 0;
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.schedule__venue-sub {
+  margin: 6px 0 0;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.schedule__address {
+  margin: 10px 0 18px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 300;
+}
+
+
+.schedule__map-btn {
+  display: inline-block;
+  padding: 12px 28px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.schedule__event-gallery {
+  margin-top: 28px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* RSVP */
+.rsvp {
+  max-width: 520px;
+  margin: 0 auto;
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+.rsvp__intro {
+  margin: 0 0 10px;
+  text-align: center;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.rsvp__deadline {
+  margin: 0 0 36px;
+  text-align: center;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.rsvp__form {
+  display: grid;
+  gap: 28px;
+}
+
+.rsvp__group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.rsvp__options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px 28px;
+}
+
+.radio-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--accent);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.radio-inline input {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.radio-inline input:checked {
+  background: radial-gradient(circle, var(--accent) 0 4px, transparent 5px);
+}
+
+.field--underline input {
+  width: 100%;
+  padding: 10px 0;
+  border: 0;
+  border-bottom: 1px solid rgba(165, 145, 139, 0.45);
+  border-radius: 0;
+  background: transparent;
+  color: var(--accent);
+  text-align: center;
+}
+
+.field--underline input::placeholder {
+  color: rgba(165, 145, 139, 0.75);
+}
+
+.field--underline input:focus {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+.field__error,
+.rsvp__error {
+  display: block;
+  margin-top: 6px;
+  color: #b42318;
+  font-size: 12px;
+  text-align: center;
+}
+
+.button {
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.button--pill {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  display: block;
+  padding: 14px 32px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.button--pill:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--white);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.button--secondary {
+  width: auto;
+  margin-top: 12px;
+  padding: 12px 24px;
+  border-radius: 999px;
+}
+
+.rsvp__success {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.rsvp__success h2 {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 32px;
+  font-weight: 300;
+}
+
+.rsvp__success p {
+  color: var(--accent);
+}
+
+.rsvp__success-note {
+  margin: 16px 0 24px;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+/* Footer */
+.footer {
+  padding: 30px 20px 70px;
+  text-align: center;
+}
+
+.footer__text {
+  margin: 0;
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 300;
+}
+
+@media (max-width: 360px) {
+  .photo-row--triple .photo-row__side {
+    width: 82px;
+    height: 130px;
+  }
+
+  .photo-row--triple .photo-row__center {
+    width: 94px;
+    height: 165px;
+  }
+}
