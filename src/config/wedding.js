@@ -99,7 +99,14 @@ export const weddingConfig = {
     left: invitationPhotoLeft,
     right: invitationPhotoRight,
   },
-  contactPhone: '+374 77 805 607',
+  contactPhones: [
+    { name: 'Hagop', phone: '+374 41241911' },
+    { name: 'Ashkhen', phone: '+374 41241910' },
+  ],
+  contactNote: {
+    hy: 'Հարցերի դեպքում',
+    en: 'For any questions',
+  },
   footerText: {
     hy: 'Սիրով սպասում ենք Ձեզ',
     en: 'We are waiting for you with love',
