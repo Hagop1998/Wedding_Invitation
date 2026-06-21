@@ -5,7 +5,14 @@ import './AdminDashboard.css'
 const ADMIN_KEY_STORAGE = 'wedding-admin-key'
 const DEFAULT_ADMIN_KEY = import.meta.env.VITE_ADMIN_KEY || '200626'
 
-function formatDate(isoString) {
+function normalizeRecord(record) {
+  return {
+    ...record,
+    attending: String(record.attending || '').toLowerCase(),
+    guestCount: Number(record.guestCount ?? record.guest_count ?? 0),
+    guestNames: record.guestNames ?? record.guest_names ?? [],
+  }
+}
   const date = new Date(isoString)
   return date.toLocaleString('en-GB', {
     day: '2-digit',
@@ -58,7 +65,7 @@ export default function AdminDashboard() {
 
     try {
       const data = await fetchRsvps(adminKey)
-      setRecords(data.records)
+      setRecords((data.records || []).map(normalizeRecord))
       sessionStorage.setItem(ADMIN_KEY_STORAGE, adminKey)
       setPassword(adminKey)
       setStatus('ready')
@@ -79,7 +86,10 @@ export default function AdminDashboard() {
   const stats = useMemo(() => {
     const accepted = records.filter((record) => record.attending === 'yes')
     const declined = records.filter((record) => record.attending === 'no')
-    const totalGuests = accepted.reduce((sum, record) => sum + record.guestCount, 0)
+    const totalGuests = accepted.reduce(
+      (sum, record) => sum + Number(record.guestCount || 0),
+      0,
+    )
 
     return {
       acceptedCount: accepted.length,
@@ -150,6 +160,13 @@ export default function AdminDashboard() {
           <p>See who accepted and who declined</p>
         </div>
         <div className="admin-header__actions">
+          <button
+            type="button"
+            className="admin-button admin-button--ghost"
+            onClick={() => loadRecords(password)}
+          >
+            Refresh
+          </button>
           <button type="button" className="admin-button admin-button--light" onClick={() => downloadCsv(records)}>
             Download CSV
           </button>

@@ -8,8 +8,8 @@ const __dirname = path.dirname(__filename)
 const DATA_DIR = path.join(__dirname, 'data')
 const DATA_FILE = path.join(DATA_DIR, 'rsvps.json')
 
-const supabaseUrl = process.env.SUPABASE_URL
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY
+const supabaseUrl = process.env.SUPABASE_URL?.trim().replace(/\/$/, '')
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY?.trim()
 const supabase =
   supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null
 
@@ -105,8 +105,18 @@ export async function addRsvp(record) {
 
 export async function initStorage() {
   if (supabase) {
+    const { error } = await supabase.from('rsvps').select('id').limit(1)
+    if (error) {
+      console.error('Supabase connection test failed:', error.message)
+    } else {
+      console.log('Supabase connection OK')
+    }
     return
   }
 
   await ensureDataFile()
+}
+
+export function getSupabaseErrorMessage(error) {
+  return error?.message || error?.details || String(error)
 }

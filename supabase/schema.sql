@@ -6,7 +6,7 @@ create table if not exists public.rsvps (
   guest_count integer not null default 0,
   guest_names text[] not null default '{}',
   phone text not null default '',
-  email text not null default '',
+  email text not null default '',image.png
   message text not null default ''
 );
 

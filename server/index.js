@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { addRsvp, getStorageMode, initStorage, readRsvps } from './db.js'
+import { addRsvp, getStorageMode, getSupabaseErrorMessage, initStorage, readRsvps } from './db.js'
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -80,7 +80,7 @@ app.post('/api/rsvp', async (req, res) => {
     res.status(201).json({ ok: true, id: record.id })
   } catch (error) {
     console.error('Failed to save RSVP:', error)
-    res.status(500).json({ message: 'Failed to save RSVP' })
+    res.status(500).json({ message: 'Failed to save RSVP', detail: getSupabaseErrorMessage(error) })
   }
 })
 
@@ -94,7 +94,7 @@ app.get('/api/rsvp', async (req, res) => {
     res.json({ count: records.length, records })
   } catch (error) {
     console.error('Failed to read RSVPs:', error)
-    res.status(500).json({ message: 'Failed to load RSVPs' })
+    res.status(500).json({ message: 'Failed to load RSVPs', detail: getSupabaseErrorMessage(error) })
   }
 })
 
