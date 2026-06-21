@@ -162,12 +162,10 @@ export default function Hero() {
         </div>
 
         <div className="hero__bottom">
-          <div className="hero__caption">
-            <p className="hero__names">
-              {groom} & {bride}
-            </p>
-            <p className="hero__tagline">{heroTagline[language]}</p>
-          </div>
+          <p className="hero__names">
+            {groom} & {bride}
+          </p>
+          <p className="hero__tagline">{heroTagline[language]}</p>
         </div>
 
         <div className="hero__photo-fade" aria-hidden="true" />
