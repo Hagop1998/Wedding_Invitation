@@ -13,6 +13,8 @@ function normalizeRecord(record) {
     guestNames: record.guestNames ?? record.guest_names ?? [],
   }
 }
+
+function formatDate(isoString) {
   const date = new Date(isoString)
   return date.toLocaleString('en-GB', {
     day: '2-digit',
@@ -92,6 +94,7 @@ export default function AdminDashboard() {
     )
 
     return {
+      totalResponses: records.length,
       acceptedCount: accepted.length,
       declinedCount: declined.length,
       totalGuests,
@@ -196,21 +199,21 @@ export default function AdminDashboard() {
           className={`admin-filter${filter === 'all' ? ' admin-filter--active' : ''}`}
           onClick={() => setFilter('all')}
         >
-          All ({records.length})
+          {`All (${stats.totalResponses})`}
         </button>
         <button
           type="button"
           className={`admin-filter${filter === 'yes' ? ' admin-filter--active' : ''}`}
           onClick={() => setFilter('yes')}
         >
-          Accepted ({stats.acceptedCount})
+          {`Accepted (${stats.acceptedCount})`}
         </button>
         <button
           type="button"
           className={`admin-filter${filter === 'no' ? ' admin-filter--active' : ''}`}
           onClick={() => setFilter('no')}
         >
-          Declined ({stats.declinedCount})
+          {`Declined (${stats.declinedCount})`}
         </button>
       </div>
 
