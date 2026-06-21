@@ -1,50 +1,19 @@
 import express from 'express'
 import cors from 'cors'
-import fs from 'fs/promises'
-import path from 'path'
-import { fileURLToPath } from 'url'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+import { addRsvp, getStorageMode, initStorage, readRsvps } from './db.js'
 
 const app = express()
 const PORT = process.env.PORT || 3001
-const ADMIN_KEY = process.env.ADMIN_KEY || 'change-me'
-const DATA_DIR = path.join(__dirname, 'data')
-const DATA_FILE = path.join(DATA_DIR, 'rsvps.json')
+const ADMIN_KEY = process.env.ADMIN_KEY || '200626'
 
 app.use(cors())
 app.use(express.json())
-
-async function ensureDataFile() {
-  await fs.mkdir(DATA_DIR, { recursive: true })
-
-  try {
-    await fs.access(DATA_FILE)
-  } catch {
-    await fs.writeFile(DATA_FILE, '[]', 'utf-8')
-  }
-}
-
-async function readRsvps() {
-  await ensureDataFile()
-  const raw = await fs.readFile(DATA_FILE, 'utf-8')
-  return JSON.parse(raw)
-}
-
-async function writeRsvps(records) {
-  await fs.writeFile(DATA_FILE, JSON.stringify(records, null, 2), 'utf-8')
-}
 
 function validateRsvp(body) {
   const errors = []
 
   if (!body.name || body.name.trim().length < 2) {
     errors.push('Name is required')
-  }
-
-  if (!['bride', 'groom'].includes(body.side)) {
-    errors.push('Side is required')
   }
 
   if (!['yes', 'no'].includes(body.attending)) {
@@ -76,7 +45,7 @@ function validateRsvp(body) {
 }
 
 app.get('/api/health', (_req, res) => {
-  res.json({ ok: true })
+  res.json({ ok: true, storage: getStorageMode() })
 })
 
 app.post('/api/rsvp', async (req, res) => {
@@ -97,7 +66,6 @@ app.post('/api/rsvp', async (req, res) => {
   const record = {
     id: crypto.randomUUID(),
     createdAt: new Date().toISOString(),
-    side: req.body.side,
     name: req.body.name.trim(),
     attending: req.body.attending,
     guestCount,
@@ -107,11 +75,13 @@ app.post('/api/rsvp', async (req, res) => {
     message: req.body.message || '',
   }
 
-  const records = await readRsvps()
-  records.push(record)
-  await writeRsvps(records)
-
-  res.status(201).json({ ok: true, id: record.id })
+  try {
+    await addRsvp(record)
+    res.status(201).json({ ok: true, id: record.id })
+  } catch (error) {
+    console.error('Failed to save RSVP:', error)
+    res.status(500).json({ message: 'Failed to save RSVP' })
+  }
 })
 
 app.get('/api/rsvp', async (req, res) => {
@@ -119,12 +89,17 @@ app.get('/api/rsvp', async (req, res) => {
     return res.status(401).json({ message: 'Unauthorized' })
   }
 
-  const records = await readRsvps()
-  res.json({ count: records.length, records })
+  try {
+    const records = await readRsvps()
+    res.json({ count: records.length, records })
+  } catch (error) {
+    console.error('Failed to read RSVPs:', error)
+    res.status(500).json({ message: 'Failed to load RSVPs' })
+  }
 })
 
 app.listen(PORT, async () => {
-  await ensureDataFile()
+  await initStorage()
   console.log(`RSVP server running on http://localhost:${PORT}`)
-  console.log(`Data file: ${DATA_FILE}`)
+  console.log(`Storage: ${getStorageMode()}`)
 })

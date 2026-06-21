@@ -5,14 +5,9 @@ import './AdminDashboard.css'
 const ADMIN_KEY_STORAGE = 'wedding-admin-key'
 const DEFAULT_ADMIN_KEY = import.meta.env.VITE_ADMIN_KEY || '200626'
 
-const sideLabels = {
-  bride: 'Հարսի կողմ',
-  groom: 'Փեսայի կողմ',
-}
-
 function formatDate(isoString) {
   const date = new Date(isoString)
-  return date.toLocaleString('hy-AM', {
+  return date.toLocaleString('en-GB', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -22,11 +17,10 @@ function formatDate(isoString) {
 }
 
 function downloadCsv(records) {
-  const headers = ['Անուն', 'Կողմ', 'Ներկայություն', 'Հյուրերի թիվ', 'Հյուրերի անուններ', 'Հեռախոս', 'Էլ․ հասցե', 'Հաղորդագրություն', 'Ամսաթիվ']
+  const headers = ['Name', 'Status', 'Guest count', 'Guest names', 'Phone', 'Email', 'Message', 'Date']
   const rows = records.map((record) => [
     record.name,
-    sideLabels[record.side] || record.side,
-    record.attending === 'yes' ? 'Կգա' : 'Չի գա',
+    record.attending === 'yes' ? 'Accepted' : 'Declined',
     record.guestCount,
     Array.isArray(record.guestNames) ? record.guestNames.join(', ') : record.name,
     record.phone,
@@ -72,7 +66,7 @@ export default function AdminDashboard() {
       sessionStorage.removeItem(ADMIN_KEY_STORAGE)
       setPassword('')
       setStatus('login')
-      setError('Գաղտնաբառը սխալ է')
+      setError('Wrong password')
     }
   }
 
@@ -83,20 +77,14 @@ export default function AdminDashboard() {
   }, [])
 
   const stats = useMemo(() => {
-    const coming = records.filter((record) => record.attending === 'yes')
-    const notComing = records.filter((record) => record.attending === 'no')
-    const totalGuests = coming.reduce((sum, record) => sum + record.guestCount, 0)
+    const accepted = records.filter((record) => record.attending === 'yes')
+    const declined = records.filter((record) => record.attending === 'no')
+    const totalGuests = accepted.reduce((sum, record) => sum + record.guestCount, 0)
 
     return {
-      comingCount: coming.length,
-      notComingCount: notComing.length,
+      acceptedCount: accepted.length,
+      declinedCount: declined.length,
       totalGuests,
-      brideGuests: coming
-        .filter((record) => record.side === 'bride')
-        .reduce((sum, record) => sum + record.guestCount, 0),
-      groomGuests: coming
-        .filter((record) => record.side === 'groom')
-        .reduce((sum, record) => sum + record.guestCount, 0),
     }
   }, [records])
 
@@ -114,7 +102,7 @@ export default function AdminDashboard() {
 
   function handleLogin(event) {
     event.preventDefault()
-    loadRecords(inputPassword.trim())
+    loadRecords(inputPassword.trim() || DEFAULT_ADMIN_KEY)
   }
 
   function handleLogout() {
@@ -129,24 +117,24 @@ export default function AdminDashboard() {
     return (
       <div className="admin">
         <div className="admin-login">
-          <h1>Հյուրերի ցանկ</h1>
-          <p>Մուտք միայն հարսանիքի զույգի համար</p>
+          <h1>Guest list</h1>
+          <p>Admin access for Hagop & Ashkhen</p>
 
           <form onSubmit={handleLogin}>
             <label className="admin-login__field">
-              <span>Գաղտնաբառ</span>
+              <span>Password</span>
               <input
                 type="password"
                 value={inputPassword}
                 onChange={(event) => setInputPassword(event.target.value)}
-                placeholder="Մուտքագրեք գաղտնաբառը"
+                placeholder="Enter password"
               />
             </label>
 
             {error && <p className="admin-login__error">{error}</p>}
 
             <button type="submit" className="admin-login__button">
-              Մուտք
+              Sign in
             </button>
           </form>
         </div>
@@ -158,42 +146,30 @@ export default function AdminDashboard() {
     <div className="admin">
       <header className="admin-header">
         <div>
-          <h1>Հյուրերի պատասխաններ</h1>
-          <p>Այստեղ տեսնում եք, թե ով է գալիս և ով՝ ոչ</p>
+          <h1>RSVP responses</h1>
+          <p>See who accepted and who declined</p>
         </div>
         <div className="admin-header__actions">
           <button type="button" className="admin-button admin-button--light" onClick={() => downloadCsv(records)}>
-            Ներբեռնել Excel
+            Download CSV
           </button>
           <button type="button" className="admin-button admin-button--ghost" onClick={handleLogout}>
-            Ելք
+            Log out
           </button>
         </div>
       </header>
 
       <section className="admin-stats">
         <article className="admin-stat admin-stat--yes">
-          <span className="admin-stat__label">Կգան</span>
-          <strong className="admin-stat__value">{stats.comingCount}</strong>
-          <span className="admin-stat__meta">{stats.totalGuests} հյուր ընդամենը</span>
+          <span className="admin-stat__label">Accepted</span>
+          <strong className="admin-stat__value">{stats.acceptedCount}</strong>
+          <span className="admin-stat__meta">{stats.totalGuests} guests total</span>
         </article>
 
         <article className="admin-stat admin-stat--no">
-          <span className="admin-stat__label">Չեն կարող գալ</span>
-          <strong className="admin-stat__value">{stats.notComingCount}</strong>
-          <span className="admin-stat__meta">մերժված պատասխան</span>
-        </article>
-
-        <article className="admin-stat admin-stat--side">
-          <span className="admin-stat__label">Հարսի կողմ</span>
-          <strong className="admin-stat__value">{stats.brideGuests}</strong>
-          <span className="admin-stat__meta">հյուր</span>
-        </article>
-
-        <article className="admin-stat admin-stat--side">
-          <span className="admin-stat__label">Փեսայի կողմ</span>
-          <strong className="admin-stat__value">{stats.groomGuests}</strong>
-          <span className="admin-stat__meta">հյուր</span>
+          <span className="admin-stat__label">Declined</span>
+          <strong className="admin-stat__value">{stats.declinedCount}</strong>
+          <span className="admin-stat__meta">cannot attend</span>
         </article>
       </section>
 
@@ -203,28 +179,28 @@ export default function AdminDashboard() {
           className={`admin-filter${filter === 'all' ? ' admin-filter--active' : ''}`}
           onClick={() => setFilter('all')}
         >
-          Բոլորը ({records.length})
+          All ({records.length})
         </button>
         <button
           type="button"
           className={`admin-filter${filter === 'yes' ? ' admin-filter--active' : ''}`}
           onClick={() => setFilter('yes')}
         >
-          Կգան ({stats.comingCount})
+          Accepted ({stats.acceptedCount})
         </button>
         <button
           type="button"
           className={`admin-filter${filter === 'no' ? ' admin-filter--active' : ''}`}
           onClick={() => setFilter('no')}
         >
-          Չեն գալիս ({stats.notComingCount})
+          Declined ({stats.declinedCount})
         </button>
       </div>
 
       {status === 'loading' ? (
-        <p className="admin-empty">Բեռնվում է...</p>
+        <p className="admin-empty">Loading...</p>
       ) : filteredRecords.length === 0 ? (
-        <p className="admin-empty">Դեռ պատասխաններ չկան</p>
+        <p className="admin-empty">No responses yet</p>
       ) : (
         <section className="admin-list">
           {filteredRecords.map((record) => (
@@ -235,47 +211,43 @@ export default function AdminDashboard() {
               <div className="admin-card__top">
                 <h2>{record.name}</h2>
                 <span className={`admin-badge admin-badge--${record.attending}`}>
-                  {record.attending === 'yes' ? 'Կգա' : 'Չի գա'}
+                  {record.attending === 'yes' ? 'Accepted' : 'Declined'}
                 </span>
               </div>
 
               <dl className="admin-card__details">
-                <div>
-                  <dt>Կողմ</dt>
-                  <dd>{sideLabels[record.side]}</dd>
-                </div>
                 {record.attending === 'yes' && (
                   <div>
-                    <dt>Հյուրերի թիվ</dt>
+                    <dt>Guests</dt>
                     <dd>{record.guestCount}</dd>
                   </div>
                 )}
                 {record.attending === 'yes' && record.guestNames?.length > 0 && (
                   <div className="admin-card__message">
-                    <dt>Հյուրերի անուններ</dt>
+                    <dt>Guest names</dt>
                     <dd>{record.guestNames.join(', ')}</dd>
                   </div>
                 )}
                 {record.phone && (
                   <div>
-                    <dt>Հեռախոս</dt>
+                    <dt>Phone</dt>
                     <dd>{record.phone}</dd>
                   </div>
                 )}
                 {record.email && (
                   <div>
-                    <dt>Էլ․ հասցե</dt>
+                    <dt>Email</dt>
                     <dd>{record.email}</dd>
                   </div>
                 )}
                 {record.message && (
                   <div className="admin-card__message">
-                    <dt>Հաղորդագրություն</dt>
+                    <dt>Message</dt>
                     <dd>{record.message}</dd>
                   </div>
                 )}
                 <div>
-                  <dt>Պատասխանել է</dt>
+                  <dt>Responded</dt>
                   <dd>{formatDate(record.createdAt)}</dd>
                 </div>
               </dl>
@@ -292,7 +264,7 @@ export default function AdminDashboard() {
             window.location.hash = ''
           }}
         >
-          ← Վերադառնալ հրավեր
+          ← Back to invitation
         </a>
       </footer>
     </div>

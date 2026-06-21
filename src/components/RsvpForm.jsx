@@ -3,7 +3,6 @@ import { weddingConfig } from '../config/wedding'
 import { submitRsvp } from '../api/rsvp'
 
 const initialForm = {
-  side: 'bride',
   name: '',
   attending: 'yes',
   guestCount: '1',
