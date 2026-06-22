@@ -503,8 +503,8 @@
 }
 
 .schedule__icon--cheers {
-  width: clamp(135px, 20vw, 220px);
-  height: clamp(135px, 20vw, 220px);
+  width: clamp(120px, 16vw, 165px);
+  height: clamp(120px, 16vw, 165px);
 }
 
 .schedule__event-title {
