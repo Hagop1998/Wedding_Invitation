@@ -169,7 +169,7 @@ export default function Hero() {
           <p className="hero__names">
             {groom} & {bride}
           </p>
-          <p className="hero__tagline">{heroTagline[language]}</p>
+          {/* <p className="hero__tagline">{heroTagline[language]}</p> */}
         </div>
 
         <div className="hero__photo-fade" aria-hidden="true" />
