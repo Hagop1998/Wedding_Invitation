@@ -449,7 +449,6 @@
 
 .schedule__events {
   display: grid;
-  gap: 70px;
   max-width: 520px;
   margin: 0 auto;
 }
@@ -459,10 +458,11 @@
 }
 
 .schedule__icon {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 16px;
-  color: var(--accent);
+  width: clamp(80px, 22vw, 200px);
+  height: clamp(80px, 22vw, 200px);
+  margin: 0 auto -35px;
+  display: block;
+  object-fit: contain;
 }
 
 .schedule__event-title {

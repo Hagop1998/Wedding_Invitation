@@ -48,7 +48,7 @@ export const weddingConfig = {
         hy: 'Պսակադրություն',
         en: 'Church Ceremony',
       },
-      icon: 'rings',
+      icon: 'church',
       time: '16:00',
       venue: {
         hy: 'Սուրբ Մարիամ Աստվածածին եկեղեցի',
@@ -71,7 +71,7 @@ export const weddingConfig = {
         hy: 'Հարսանեկան հանդիսություն',
         en: 'Wedding Reception',
       },
-      icon: 'champagne',
+      icon: 'cheers',
       time: '17:30',
       venue: {
         hy: 'Lianna Garden Hall',

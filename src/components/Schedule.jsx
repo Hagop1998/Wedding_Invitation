@@ -1,34 +1,20 @@
+import churchIcon from '../assets/Church.svg'
+import cheersIcon from '../assets/cheers.svg'
 import { weddingConfig } from '../config/wedding'
 
+const scheduleIcons = {
+  church: churchIcon,
+  cheers: cheersIcon,
+}
+
 function ScheduleIcon({ type }) {
-  if (type === 'champagne') {
-    return (
-      <svg className="schedule__icon" viewBox="0 0 64 64" aria-hidden="true">
-        <path
-          d="M18 8h28l-6 22H24L18 8zm14 28v18M24 54h16M30 26h4"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        <path d="M22 14h20M24 20h16" stroke="currentColor" strokeWidth="1.5" opacity="0.5" />
-      </svg>
-    )
+  const src = scheduleIcons[type]
+
+  if (!src) {
+    return null
   }
 
-  return (
-    <svg className="schedule__icon" viewBox="0 0 64 64" aria-hidden="true">
-      <circle cx="24" cy="36" r="12" fill="none" stroke="currentColor" strokeWidth="2" />
-      <circle cx="40" cy="36" r="12" fill="none" stroke="currentColor" strokeWidth="2" />
-      <path
-        d="M30 28c0-6 2-10 6-10s6 4 6 10"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-      />
-      <path d="M32 18v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  )
+  return <img className="schedule__icon" src={src} alt="" aria-hidden="true" />
 }
 
 function PhotoRow({ images, className = '' }) {
@@ -58,14 +44,11 @@ export default function Schedule() {
 
   return (
     <section className="section schedule">
-      {/* <h2 className="section__title">Օրվա ծրագիրը</h2>
-
-      <PhotoRow images={scheduleGallery} className="schedule__intro-gallery" /> */}
-
       <div className="schedule__events">
         {schedule.map((item) => (
           <article key={item.title.hy} className="schedule__event">
             <ScheduleIcon type={item.icon} />
+
             <h3 className="schedule__event-title">{item.title[language]}</h3>
             <p className="schedule__time">{item.time}</p>
             <p className="schedule__venue">{item.venue[language]}</p>
