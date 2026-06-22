@@ -146,6 +146,41 @@
   padding: 0;
   background: var(--bg);
   text-align: center;
+  position: relative;
+}
+
+.hero__music-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 20;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(165, 145, 139, 0.45);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--accent-dark);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.hero__music-btn:hover:not(:disabled) {
+  background: var(--white);
+  transform: scale(1.05);
+}
+
+.hero__music-btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.hero__music-btn--playing {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+  color: var(--white);
 }
 
 .hero__photo-wrap {
@@ -319,9 +354,11 @@
 }
 
 .hero__youtube-player {
-  position: absolute;
-  width: 0;
-  height: 0;
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 200px;
+  height: 200px;
   overflow: hidden;
   opacity: 0;
   pointer-events: none;
@@ -460,7 +497,7 @@
 .schedule__icon {
   width: clamp(80px, 22vw, 200px);
   height: clamp(80px, 22vw, 200px);
-  margin: 0 auto -35px;
+  margin: 0 auto 25px;
   display: block;
   object-fit: contain;
 }

@@ -39,6 +39,8 @@ export default function Hero() {
   const playerContainerRef = useRef(null)
   const playerReadyRef = useRef(false)
   const wantsSoundRef = useRef(false)
+  const [musicReady, setMusicReady] = useState(false)
+  const [musicPlaying, setMusicPlaying] = useState(false)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -61,6 +63,7 @@ export default function Hero() {
         return false
       }
 
+      // Must run synchronously inside a tap/click handler on Android Chrome.
       player.unMute()
       player.setVolume(100)
       player.playVideo()
@@ -69,23 +72,25 @@ export default function Hero() {
       const isActive =
         state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING
 
-      return isActive || !player.isMuted?.()
+      if (isActive || !player.isMuted?.()) {
+        setMusicPlaying(true)
+        return true
+      }
+
+      return false
     }
 
     function onUserInteraction() {
       wantsSoundRef.current = true
-      if (tryPlayWithSound()) {
-        document.removeEventListener('pointerdown', onUserInteraction)
-        document.removeEventListener('keydown', onUserInteraction)
-      }
+      tryPlayWithSound()
     }
 
     loadYouTubeApi().then((YT) => {
       if (cancelled || !playerContainerRef.current) return
 
       playerRef.current = new YT.Player(playerContainerRef.current, {
-        height: '0',
-        width: '0',
+        height: '200',
+        width: '200',
         videoId: youtubeVideoId,
         playerVars: {
           autoplay: 1,
@@ -104,35 +109,29 @@ export default function Hero() {
         events: {
           onReady: (event) => {
             playerReadyRef.current = true
+            setMusicReady(true)
             event.target.mute()
             event.target.playVideo()
-
-            if (wantsSoundRef.current) {
-              tryPlayWithSound()
-            }
           },
           onStateChange: (event) => {
-            if (
-              wantsSoundRef.current &&
-              event.data === YT.PlayerState.PLAYING &&
-              event.target.isMuted?.()
-            ) {
-              event.target.unMute()
-              event.target.setVolume(100)
+            if (event.data === YT.PlayerState.PLAYING) {
+              setMusicPlaying(!event.target.isMuted?.())
             }
           },
         },
       })
     })
 
-    document.addEventListener('pointerdown', onUserInteraction, { passive: true })
+    document.addEventListener('touchstart', onUserInteraction, { passive: true })
+    document.addEventListener('click', onUserInteraction)
     document.addEventListener('keydown', onUserInteraction)
 
     return () => {
       cancelled = true
       playerReadyRef.current = false
       wantsSoundRef.current = false
-      document.removeEventListener('pointerdown', onUserInteraction)
+      document.removeEventListener('touchstart', onUserInteraction)
+      document.removeEventListener('click', onUserInteraction)
       document.removeEventListener('keydown', onUserInteraction)
       playerRef.current?.destroy?.()
       playerRef.current = null
@@ -151,8 +150,50 @@ export default function Hero() {
     { label: copy.units[3], value: pad(timeLeft.seconds) },
   ]
 
+  function handleMusicToggle() {
+    wantsSoundRef.current = true
+    const player = playerRef.current
+    const { YT } = window
+
+    if (musicPlaying) {
+      player?.mute?.()
+      setMusicPlaying(false)
+      return
+    }
+
+    if (!playerReadyRef.current || !player?.playVideo || !YT) {
+      return
+    }
+
+    player.unMute()
+    player.setVolume(100)
+    player.playVideo()
+
+    const state = player.getPlayerState?.()
+    const isActive =
+      state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING
+
+    if (isActive || !player.isMuted?.()) {
+      setMusicPlaying(true)
+    }
+  }
+
   return (
     <section className="hero">
+      {youtubeVideoId && (
+        <button
+          type="button"
+          className={`hero__music-btn${musicPlaying ? ' hero__music-btn--playing' : ''}`}
+          onClick={handleMusicToggle}
+          aria-label={musicPlaying ? 'Mute wedding music' : 'Play wedding music'}
+          aria-pressed={musicPlaying}
+          disabled={!musicReady}
+          title={musicReady ? (musicPlaying ? 'Mute music' : 'Play music') : 'Loading music…'}
+        >
+          ♪
+        </button>
+      )}
+
       <div className="hero__photo-wrap">
         <img className="hero__photo" src={heroImage} alt={`${groom} and ${bride}`} />
 
