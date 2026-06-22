@@ -198,8 +198,10 @@ export default function Hero() {
         <img className="hero__photo" src={heroImage} alt={`${groom} and ${bride}`} />
 
         <div className="hero__overlay">
-          <p className="hero__label">{heroLabel[language]}</p>
+        <p className="hero__label">{heroLabel[language]}</p>
+
           <img className="hero__logo" src={heroLogo} alt="" aria-hidden="true" />
+          {/* <p className="hero__label">{heroLabel[language]}</p> */}
         </div>
 
         <div className="hero__bottom">
