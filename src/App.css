@@ -495,9 +495,9 @@
 }
 
 .schedule__icon {
-  width: clamp(220px, 28vw, 300px);
-  height: clamp(220px, 28vw, 300px);
-  margin: 0 auto 20px;
+  width: clamp(110px, 14vw, 150px);
+  height: clamp(110px, 14vw, 150px);
+  margin: 0 auto 16px;
   display: block;
   object-fit: contain;
 }
