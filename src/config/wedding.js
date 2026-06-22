@@ -110,4 +110,9 @@ export const weddingConfig = {
     hy: 'Սիրով սպասում ենք Ձեզ',
     en: 'We are waiting for you with love',
   },
+  gift: {
+    bankName: 'Ameria Bank',
+    accountNumber: '1570049764687600',
+    currency: 'AMD',
+  },
 }

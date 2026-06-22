@@ -515,6 +515,7 @@
   flex: 0 0 44%;
   margin-top: clamp(56px, 14vw, 84px);
   overflow: hidden;
+  border-radius: 20px;
 }
 
 .invitation__photo-wrap--left .invitation__photo {
@@ -536,6 +537,7 @@
 .invitation__photo-wrap--right {
   flex: 0 0 52%;
   overflow: hidden;
+  border-radius: 20px;
 }
 
 .invitation__photo {
@@ -783,6 +785,73 @@
   margin: 16px 0 24px;
   font-size: 18px;
   font-weight: 300;
+}
+
+/* Gift / bank account */
+.gift {
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
+
+.gift__card {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 28px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(165, 145, 139, 0.45);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.gift__divider {
+  position: relative;
+  width: min(210px, 72%);
+  height: 1px;
+  margin: 14px 0;
+  background: rgba(165, 145, 139, 0.55);
+}
+
+.gift__divider::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  background: var(--bg);
+  border: 1px solid rgba(165, 145, 139, 0.75);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.gift__heading {
+  margin: 0;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.gift__bank-name {
+  margin: 20px 0 14px;
+  color: var(--accent-dark);
+  font-size: clamp(17px, 4vw, 20px);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+.gift__account {
+  margin: 0;
+  color: var(--accent-dark);
+  font-size: clamp(13px, 3.4vw, 15px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  word-break: break-all;
 }
 
 /* Footer */

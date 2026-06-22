@@ -3,6 +3,7 @@ import Hero from './components/Hero'
 import Invitation from './components/Invitation'
 import Schedule from './components/Schedule'
 import RsvpForm from './components/RsvpForm'
+import Gift from './components/Gift'
 import Footer from './components/Footer'
 import AdminDashboard from './pages/AdminDashboard'
 import './App.css'
@@ -35,6 +36,7 @@ function App() {
       <Invitation />
       <Schedule />
       <RsvpForm />
+      <Gift />
       <Footer />
     </main>
   )
