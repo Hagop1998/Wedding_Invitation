@@ -1,5 +1,5 @@
 import heroPhoto from '../assets/wedding19.JPG'
-import heroLogo from '../assets/LogoWedding2.svg'
+import heroLogo from '../assets/LogoHA.svg'
 import invitationPhotoLeft from '../assets/LEFT.jpeg'
 import invitationPhotoRight from '../assets/Wedding8.JPG'
 import churchPhoto from '../assets/wedding21.jpeg'
