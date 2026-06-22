@@ -265,7 +265,7 @@
 }
 
 .hero__names {
-  margin: 14px 0 -7px;
+  margin: 14px 0 -12px;
   font-family: var(--font-names);
   font-size: clamp(34px, 9vw, 48px);
   font-weight: 300;
@@ -279,7 +279,7 @@
 }
 
 .hero__tagline {
-  margin: 0;
+  margin: 5px;
   font-family: var(--font-script);
   font-size: clamp(17px, 4.2vw, 30px);
   font-weight: 400;
@@ -313,6 +313,14 @@
   font-size: clamp(22px, 5vw, 32px);
   font-weight: 300;
   letter-spacing: 0.02em;
+}
+
+.hero__wedding-date {
+  margin: 0;
+  color: var(--accent);
+  font-size: clamp(26px, 5.5vw, 45px);
+  font-weight: 400;
+  letter-spacing: 0.05em;
 }
 
 .hero__countdown-grid {
@@ -375,28 +383,72 @@
   padding: 0 12px;
 }
 
-.invitation__greeting {
-  margin: 0 0 22px;
+.invitation__quote {
+  margin: 0 0 18px;
   color: var(--accent);
-  font-size: clamp(22px, 4.5vw, 30px);
-  font-weight: 300;
-  letter-spacing: 0.04em;
-}
-
-.invitation__body {
-  margin: 0 0 32px;
-  color: var(--accent);
-  font-size: 15px;
-  line-height: 1.9;
-  font-weight: 300;
-}
-
-.invitation__date {
-  margin: 0;
-  color: var(--accent);
-  font-size: clamp(26px, 5.5vw, 45px);
+  font-family: var(--font-script);
+  font-size: clamp(18px, 4.2vw, 24px);
+  line-height: 1.65;
   font-weight: 400;
-  letter-spacing: 0.05em;
+  font-style: italic;
+}
+
+.invitation__citation {
+  margin: 0 0 36px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+.invitation__countdown {
+  margin: 0 auto;
+  max-width: 420px;
+}
+
+.invitation__countdown-title {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: clamp(22px, 5vw, 32px);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.invitation__countdown-grid {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.invitation__countdown-unit {
+  position: relative;
+  flex: 1;
+  padding: 0 10px;
+}
+
+.invitation__countdown-unit strong {
+  display: block;
+  color: var(--accent);
+  font-size: clamp(26px, 6vw, 40px);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.invitation__countdown-unit span {
+  display: block;
+  margin-top: 8px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 300;
+}
+
+.invitation__countdown-divider {
+  position: absolute;
+  top: 6px;
+  right: 0;
+  width: 1px;
+  height: 38px;
+  background: rgba(165, 145, 139, 0.4);
 }
 
 .invitation__content > * {
@@ -407,15 +459,15 @@
   opacity: 0;
 }
 
-.invitation--revealed .invitation__greeting {
+.invitation--revealed .invitation__quote {
   animation: slide-from-left 0.85s ease 0.1s both;
 }
 
-.invitation--revealed .invitation__body {
+.invitation--revealed .invitation__citation {
   animation: slide-from-left 0.85s ease 0.25s both;
 }
 
-.invitation--revealed .invitation__date {
+.invitation--revealed .invitation__countdown {
   animation: slide-from-left 0.85s ease 0.4s both;
 }
 

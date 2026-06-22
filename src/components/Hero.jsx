@@ -2,25 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { weddingConfig } from '../config/wedding'
 import { getYouTubeVideoId, loadYouTubeApi } from '../utils/youtube'
 
-function getTimeLeft(targetDate) {
-  const diff = new Date(targetDate).getTime() - Date.now()
-
-  if (diff <= 0) {
-    return { days: 0, hours: 0, minutes: 0, seconds: 0 }
-  }
-
-  return {
-    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-    minutes: Math.floor((diff / (1000 * 60)) % 60),
-    seconds: Math.floor((diff / 1000) % 60),
-  }
-}
-
-function pad(value) {
-  return String(value).padStart(2, '0')
-}
-
 export default function Hero() {
   const {
     groom,
@@ -29,26 +10,16 @@ export default function Hero() {
     heroLabel,
     heroLogo,
     heroTagline,
-    countdownTitle,
+    displayDate,
     youtubeMusic,
-    weddingDate,
   } = weddingConfig
   const youtubeVideoId = getYouTubeVideoId(youtubeMusic)
-  const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(weddingDate))
   const playerRef = useRef(null)
   const playerContainerRef = useRef(null)
   const playerReadyRef = useRef(false)
   const wantsSoundRef = useRef(false)
   const [musicReady, setMusicReady] = useState(false)
   const [musicPlaying, setMusicPlaying] = useState(false)
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(getTimeLeft(weddingDate))
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [weddingDate])
 
   useEffect(() => {
     if (!youtubeVideoId || !playerContainerRef.current) return undefined
@@ -139,16 +110,6 @@ export default function Hero() {
   }, [youtubeVideoId])
 
   const language = 'en'
-  const copy = {
-    units: ['day', 'hour', 'minute', 'second'],
-  }
-
-  const units = [
-    { label: copy.units[0], value: String(timeLeft.days) },
-    { label: copy.units[1], value: pad(timeLeft.hours) },
-    { label: copy.units[2], value: pad(timeLeft.minutes) },
-    { label: copy.units[3], value: pad(timeLeft.seconds) },
-  ]
 
   function handleMusicToggle() {
     wantsSoundRef.current = true
@@ -215,18 +176,7 @@ export default function Hero() {
       </div>
 
       <div className="hero__countdown">
-        <h1 className="hero__countdown-title">{countdownTitle[language]}</h1>
-        <div className="hero__countdown-grid">
-          {units.map((unit, index) => (
-            <div key={unit.label} className="hero__countdown-unit">
-              <strong>{unit.value}</strong>
-              <span>{unit.label}</span>
-              {index < units.length - 1 && (
-                <span className="hero__countdown-divider" aria-hidden="true" />
-              )}
-            </div>
-          ))}
-        </div>
+        <p className="hero__wedding-date">{displayDate}</p>
       </div>
 
       {youtubeVideoId && (

@@ -29,13 +29,11 @@ export const weddingConfig = {
   },
   youtubeMusic: 'https://www.youtube.com/watch?v=_ZKliUdu4T0&list=PL3jBkgkR2PVFt61n5j9m_7TRnj3bPn8cO',
   invitationText: {
-    greeting: {
-      hy: 'Սիրելի հյուրեր',
-      en: 'Dear guests',
+    quote: {
+      en: '"So they are no longer two, but one flesh. Therefore, what God has joined together, let no one separate."',
     },
-    body: {
-      hy: 'Մենք ցանկանում ենք Ձեզ հետ կիսել մեր կյանքի կարևորագույն օրերից մեկը։ Մեծ ուրախությամբ հրավիրում ենք Ձեզ մեր հարսանիքին։',
-      en: 'We would like to share one of the most important days of our lives with you. We are delighted to invite you to our wedding.',
+    citation: {
+      en: 'Matthew 19:6',
     },
   },
   scheduleGallery: [
