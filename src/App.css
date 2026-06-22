@@ -265,7 +265,7 @@
 }
 
 .hero__names {
-  margin: 14px 0 6px;
+  margin: 14px 0 0px;
   font-family: var(--font-names);
   font-size: clamp(34px, 9vw, 48px);
   font-weight: 700;
@@ -281,7 +281,7 @@
 .hero__tagline {
   margin: 0;
   font-family: var(--font-script);
-  font-size: clamp(17px, 4.2vw, 22px);
+  font-size: clamp(17px, 4.2vw, 30px);
   font-weight: 400;
   color: var(--accent-dark);
   opacity: 0.95;
