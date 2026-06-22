@@ -265,10 +265,10 @@
 }
 
 .hero__names {
-  margin: 14px 0 0px;
+  margin: 14px 0 -4px;
   font-family: var(--font-names);
   font-size: clamp(34px, 9vw, 48px);
-  font-weight: 700;
+  font-weight: 300;
   font-style: italic;
   line-height: 1.15;
   white-space: nowrap;
