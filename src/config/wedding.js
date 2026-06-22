@@ -87,8 +87,8 @@ export const weddingConfig = {
       mapUrl:
         'https://yandex.com/maps/org/liana_garden_holl/75872747374/?ll=44.391472%2C40.164666&z=16',
       images: [
-        receptionLeftPhoto,
         receptionCenterPhoto,
+        receptionLeftPhoto,
         receptionRightPhoto,
       ],
     },
