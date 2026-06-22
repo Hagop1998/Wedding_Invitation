@@ -14,7 +14,14 @@ function ScheduleIcon({ type }) {
     return null
   }
 
-  return <img className="schedule__icon" src={src} alt="" aria-hidden="true" />
+  return (
+    <img
+      className={`schedule__icon${type === 'cheers' ? ' schedule__icon--cheers' : ''}`}
+      src={src}
+      alt=""
+      aria-hidden="true"
+    />
+  )
 }
 
 function PhotoRow({ images, className = '' }) {

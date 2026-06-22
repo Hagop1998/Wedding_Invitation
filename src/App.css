@@ -502,6 +502,11 @@
   object-fit: contain;
 }
 
+.schedule__icon--cheers {
+  width: clamp(135px, 18vw, 180px);
+  height: clamp(135px, 18vw, 180px);
+}
+
 .schedule__event-title {
   margin: 0 0 10px;
   color: var(--accent);
