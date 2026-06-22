@@ -86,6 +86,7 @@
 .photo-row img {
   object-fit: cover;
   display: block;
+  border-radius: 20px;
 }
 
 .photo-row--triple .photo-row__side {
@@ -111,6 +112,7 @@
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
+  border-radius: 20px;
 }
 
 .photo-row__frame img {
