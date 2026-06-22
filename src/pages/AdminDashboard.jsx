@@ -160,7 +160,7 @@ export default function AdminDashboard() {
       <header className="admin-header">
         <div>
           <h1>RSVP responses</h1>
-          <p>See who accepted and who declined</p>
+          <p>Accepted invitations and total guest count</p>
         </div>
         <div className="admin-header__actions">
           <button
@@ -183,7 +183,17 @@ export default function AdminDashboard() {
         <article className="admin-stat admin-stat--yes">
           <span className="admin-stat__label">Accepted</span>
           <strong className="admin-stat__value">{stats.acceptedCount}</strong>
-          <span className="admin-stat__meta">{stats.totalGuests} guests total</span>
+          <span className="admin-stat__meta">
+            {stats.acceptedCount === 1 ? 'invitation' : 'invitations'}
+          </span>
+        </article>
+
+        <article className="admin-stat admin-stat--guests">
+          <span className="admin-stat__label">Total guests</span>
+          <strong className="admin-stat__value">{stats.totalGuests}</strong>
+          <span className="admin-stat__meta">
+            {stats.totalGuests === 1 ? 'person attending' : 'people attending'}
+          </span>
         </article>
 
         <article className="admin-stat admin-stat--no">
@@ -206,7 +216,7 @@ export default function AdminDashboard() {
           className={`admin-filter${filter === 'yes' ? ' admin-filter--active' : ''}`}
           onClick={() => setFilter('yes')}
         >
-          {`Accepted (${stats.acceptedCount})`}
+          {`Accepted (${stats.acceptedCount} · ${stats.totalGuests} guests)`}
         </button>
         <button
           type="button"
@@ -231,7 +241,9 @@ export default function AdminDashboard() {
               <div className="admin-card__top">
                 <h2>{record.name}</h2>
                 <span className={`admin-badge admin-badge--${record.attending}`}>
-                  {record.attending === 'yes' ? 'Accepted' : 'Declined'}
+                  {record.attending === 'yes'
+                    ? `Accepted · ${record.guestCount} ${record.guestCount === 1 ? 'guest' : 'guests'}`
+                    : 'Declined'}
                 </span>
               </div>
 

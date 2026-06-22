@@ -88,7 +88,7 @@
   max-width: 960px;
   margin: 0 auto 1.5rem;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.85rem;
 }
 
@@ -128,7 +128,7 @@
   border-top: 4px solid #c62828;
 }
 
-.admin-stat--side {
+.admin-stat--guests {
   border-top: 4px solid var(--accent);
 }
 
@@ -252,7 +252,7 @@
 
 @media (max-width: 768px) {
   .admin-stats {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 
   .admin-card__details {
