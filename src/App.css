@@ -125,6 +125,14 @@
   transform: translate(-50%, -50%);
 }
 
+/* Church photo — zoom in and pan left to hide the car, keep full bodies */
+.schedule__event-gallery.photo-row--single .photo-row__frame img {
+  width: 165%;
+  height: 148%;
+  object-position: 34% 52%;
+  transform: translate(-54%, -50%);
+}
+
 @media (min-width: 480px) {
   .photo-row--triple .photo-row__side {
     width: 120px;
