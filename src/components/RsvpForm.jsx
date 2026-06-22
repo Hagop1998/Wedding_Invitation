@@ -5,7 +5,7 @@ import { submitRsvp } from '../api/rsvp'
 const initialForm = {
   name: '',
   attending: 'yes',
-  guestCount: '1',
+  guestCount: '',
   guestNames: [],
 }
 
@@ -62,7 +62,15 @@ export default function RsvpForm() {
   const [errorMessage, setErrorMessage] = useState('')
 
   const guestCountNumber =
-    form.attending === 'yes' ? Math.max(1, Number(form.guestCount) || 1) : 0
+    form.attending === 'yes' && form.guestCount !== ''
+      ? Math.max(1, Number(form.guestCount) || 0)
+      : 0
+
+  function handleGuestCountFocus() {
+    if (form.guestCount === '') {
+      updateGuestCount('1')
+    }
+  }
 
   function updateField(field, value) {
     setForm((current) => ({ ...current, [field]: value }))
@@ -240,6 +248,7 @@ export default function RsvpForm() {
                 max="20"
                 value={form.guestCount}
                 placeholder={copy[language].guestCountPlaceholder}
+                onFocus={handleGuestCountFocus}
                 onChange={(event) => updateGuestCount(event.target.value)}
               />
               {errors.guestCount && <small className="field__error">{errors.guestCount}</small>}
