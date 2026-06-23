@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { addRsvp, getStorageMode, getSupabaseErrorMessage, initStorage, readRsvps } from './db.js'
+import { addRsvp, clearAllRsvps, getStorageMode, getSupabaseErrorMessage, initStorage, readRsvps } from './db.js'
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -95,6 +95,21 @@ app.get('/api/rsvp', async (req, res) => {
   } catch (error) {
     console.error('Failed to read RSVPs:', error)
     res.status(500).json({ message: 'Failed to load RSVPs', detail: getSupabaseErrorMessage(error) })
+  }
+})
+
+app.delete('/api/rsvp', async (req, res) => {
+  if (req.headers['x-admin-key'] !== ADMIN_KEY) {
+    return res.status(401).json({ message: 'Unauthorized' })
+  }
+
+  try {
+    const beforeCount = (await readRsvps()).length
+    await clearAllRsvps()
+    res.json({ ok: true, deleted: beforeCount })
+  } catch (error) {
+    console.error('Failed to clear RSVPs:', error)
+    res.status(500).json({ message: 'Failed to clear RSVPs', detail: getSupabaseErrorMessage(error) })
   }
 })
 

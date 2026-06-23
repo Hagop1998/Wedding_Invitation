@@ -82,6 +82,23 @@ export async function readRsvps() {
   return readRsvpsFromFile()
 }
 
+export async function clearAllRsvps() {
+  if (supabase) {
+    const { error } = await supabase
+      .from('rsvps')
+      .delete()
+      .not('id', 'is', null)
+
+    if (error) {
+      throw error
+    }
+
+    return
+  }
+
+  await writeRsvpsToFile([])
+}
+
 export async function addRsvp(record) {
   if (supabase) {
     const { data, error } = await supabase
