@@ -254,7 +254,7 @@
   width: clamp(112px, 32vw, 175px);
   height: auto;
   max-width: 175px;
-  margin: 0 auto;
+  margin: 10px auto;
   object-fit: contain;
   filter: drop-shadow(0 2px 14px rgba(0, 0, 0, 0.35));
   animation: hero-logo-in 0.9s ease 0.5s both;
