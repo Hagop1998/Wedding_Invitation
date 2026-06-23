@@ -256,12 +256,20 @@
   max-width: 175px;
   margin: 0 auto;
   object-fit: contain;
-  filter: brightness(0) invert(1) drop-shadow(0 2px 14px rgba(0, 0, 0, 0.35));
-  -webkit-filter: brightness(0) invert(1) drop-shadow(0 2px 14px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 2px 14px rgba(0, 0, 0, 0.35));
   animation: hero-logo-in 0.9s ease 0.5s both;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transform: translateZ(0);
+}
+
+.hero__logo--ios {
+  display: none;
+}
+
+html.ios .hero__logo--default {
+  display: none;
+}
+
+html.ios .hero__logo--ios {
+  display: block;
 }
 
 @keyframes hero-logo-in {

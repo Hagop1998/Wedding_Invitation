@@ -1,5 +1,6 @@
 import heroPhoto from '../assets/wedding19.JPG'
 import heroLogo from '../assets/LogoHA3.svg'
+import heroLogoIos from '../assets/LogoHA1.svg'
 import invitationPhotoLeft from '../assets/LEFT.jpeg'
 import invitationPhotoRight from '../assets/Wedding8.JPG'
 import churchPhoto from '../assets/Wedding25.jpeg'
@@ -19,6 +20,7 @@ export const weddingConfig = {
     en: 'Wedding Invitation',
   },
   heroLogo,
+  heroLogoIos,
   heroTagline: {
     hy: 'Մեր հավերժությունը սկսվում է այսօր',
     en: 'Our forever begins today',

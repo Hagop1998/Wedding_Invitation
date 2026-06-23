@@ -9,6 +9,7 @@ export default function Hero() {
     heroImage,
     heroLabel,
     heroLogo,
+    heroLogoIos,
     displayDate,
     youtubeMusic,
   } = weddingConfig
@@ -108,7 +109,8 @@ export default function Hero() {
 
         <div className="hero__overlay">
           <p className="hero__label">{heroLabel[language]}</p>
-          <img className="hero__logo" src={heroLogo} alt="" aria-hidden="true" />
+          <img className="hero__logo hero__logo--default" src={heroLogo} alt="" aria-hidden="true" />
+          <img className="hero__logo hero__logo--ios" src={heroLogoIos} alt="" aria-hidden="true" />
         </div>
 
         <div className="hero__bottom">
